@@ -16,16 +16,15 @@ class ApiController extends Controller
             $dto = $request->toDto();
             $result = $action->execute($dto);
 
-            return response()->json([
-                'success' => true,
-                'source' => $result['source'],
-                'data' => $result['data']
-            ]);
+            return apiSuccess(
+                data: $result['data'],
+                extra: ['source' => $result['source']]
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 502);
+            return apiError(
+                message: $e->getMessage(),
+                statusCode: 502
+            );
         }
     }
 }
